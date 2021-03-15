@@ -1,0 +1,16 @@
+<configuration scan="true">
+
+	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d %p \(%t\) [%c] - %m%n</pattern>
+		</encoder>
+	</appender>
+
+	<logger name="com.nischit.sample.myservice" level="debug"/>
+	<logger name="org.springframework" level="info"/>
+
+	<root level="info">
+		<appender-ref ref="stdout" />
+	</root>
+
+</configuration>
