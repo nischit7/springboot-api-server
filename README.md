@@ -6,6 +6,10 @@ Of course the focus here is on CI. This project is not going to share knowledge 
 For those who are doing it for the first time, read on.
 
 I have taken a stab with the latest libraries and SDK in mind.
+It extends parent https://github.com/nischit7/java-web-base to derive the following abilities -
+1. A single place to manage dependencies
+2. A single place with all plugins configured
+3. A single place with all code linting tools enabled.
 
 # Objectives that were thought through while building this sample service
 
