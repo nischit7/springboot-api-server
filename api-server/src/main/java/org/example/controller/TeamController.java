@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Team controller REST API.
+ */
 @RestController
 @RequestMapping(ApiUrls.TEAMS_API_URI)
 public class TeamController {
