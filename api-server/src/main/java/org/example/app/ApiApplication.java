@@ -3,6 +3,7 @@ package org.example.app;
 import org.example.config.EnableRestControllers;
 import org.example.localization.config.EnableLocalization;
 import org.example.persistence.sql.config.EnableSqlPersistence;
+import org.example.security.config.EnableAuthentication;
 import org.example.support.ApiUrls;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 @EnableLocalization
 @EnableRestControllers
 @EnableSqlPersistence
+@EnableAuthentication
 public class ApiApplication extends SpringBootServletInitializer {
 
     public static final String API_SERVLET_NAME = "API_SERVLET";

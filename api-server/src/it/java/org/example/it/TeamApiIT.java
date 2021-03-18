@@ -1,11 +1,19 @@
 package org.example.it;
 
+import java.time.Instant;
+import java.util.Date;
+
+import org.example.security.JwtHelper;
 import org.example.util.JsonUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.restassured.RestAssured;
 import io.restassured.config.SSLConfig;
 
@@ -15,6 +23,9 @@ import static org.hamcrest.Matchers.*;
  * Integration tests for teams functionality.
  */
 public class TeamApiIT extends AbstractApiIT {
+
+    @Autowired
+    private JwtHelper jwtHelper;
 
     @Test
     @DisplayName("When team creation succeeds")
@@ -30,6 +41,8 @@ public class TeamApiIT extends AbstractApiIT {
                 .config(RestAssured.config().sslConfig(SSLConfig.sslConfig().relaxedHTTPSValidation()))
                 .baseUri(BASE_SERVER_URL)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header(HttpHeaders.AUTHORIZATION, buildAuthHeader())
+                .accept(MediaType.APPLICATION_JSON_VALUE)
                     .body(JsonUtils.convertFileToJsonString("teamCreateFailsBadPayload-it.json"))
                 .log()
                     .all(true)
@@ -45,6 +58,7 @@ public class TeamApiIT extends AbstractApiIT {
         RestAssured.given()
                 .config(RestAssured.config().sslConfig(SSLConfig.sslConfig().relaxedHTTPSValidation()))
                 .baseUri(BASE_SERVER_URL)
+                .header(HttpHeaders.AUTHORIZATION, buildAuthHeader())
                 .contentType(MediaType.APPLICATION_RSS_XML_VALUE)
                 .body(JsonUtils.convertFileToJsonString("teamCreateFailsBadPayload-it.json"))
                 .log()
@@ -62,6 +76,7 @@ public class TeamApiIT extends AbstractApiIT {
         RestAssured.given()
                 .config(RestAssured.config().sslConfig(SSLConfig.sslConfig().relaxedHTTPSValidation()))
                     .baseUri(BASE_SERVER_URL)
+                .header(HttpHeaders.AUTHORIZATION, buildAuthHeader())
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                     .log()
                     .all(true)
@@ -79,6 +94,7 @@ public class TeamApiIT extends AbstractApiIT {
         RestAssured.given()
                 .config(RestAssured.config().sslConfig(SSLConfig.sslConfig().relaxedHTTPSValidation()))
                 .baseUri(BASE_SERVER_URL)
+                .header(HttpHeaders.AUTHORIZATION, buildAuthHeader())
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .log()
                     .all(true)
@@ -94,6 +110,7 @@ public class TeamApiIT extends AbstractApiIT {
         RestAssured.given()
                 .config(RestAssured.config().sslConfig(SSLConfig.sslConfig().relaxedHTTPSValidation()))
                 .baseUri(BASE_SERVER_URL)
+                .header(HttpHeaders.AUTHORIZATION, buildAuthHeader())
                 .accept(MediaType.APPLICATION_PDF_VALUE)
                 .log()
                 .all(true)
@@ -108,6 +125,7 @@ public class TeamApiIT extends AbstractApiIT {
                 .config(RestAssured.config().sslConfig(SSLConfig.sslConfig().relaxedHTTPSValidation()))
                 .baseUri(BASE_SERVER_URL)
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .header(HttpHeaders.AUTHORIZATION, buildAuthHeader())
                     .body(JsonUtils.convertFileToJsonString(payloadFileName))
                     .log()
                         .all(true)
@@ -121,11 +139,23 @@ public class TeamApiIT extends AbstractApiIT {
         RestAssured.given()
                 .config(RestAssured.config().sslConfig(SSLConfig.sslConfig().relaxedHTTPSValidation()))
                 .baseUri(BASE_SERVER_URL)
+                .header(HttpHeaders.AUTHORIZATION, buildAuthHeader())
                 .log()
                     .all(true)
                 .delete(ApiUrls.API_CONTEXT_PATH + ApiUrls.TEAMS_API_URI + "/" + teamId)
                     .prettyPeek()
                 .then()
                     .statusCode(HttpStatus.NO_CONTENT.value());
+    }
+
+    private String buildAuthHeader() {
+        final String jwtToken = Jwts.builder()
+                .setSubject("username")
+                .setIssuedAt(Date.from(Instant.now()))
+                .setExpiration(Date.from(Instant.now().plusMillis(14400000)))
+                .signWith(SignatureAlgorithm.HS512, "12345678901234567890")
+                .compact();
+
+        return "Bearer " + jwtToken;
     }
 }

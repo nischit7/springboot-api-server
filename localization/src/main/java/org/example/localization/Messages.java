@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 public class Messages {
 
     public static final Locale DEFAULT_LOCALE = Locale.US;
+    public static final String UNAUTH_USER = "unauthorized.user";
     public static final String SERVER_ERROR_KEY = "unmapped.message";
     public static final String BAD_REQUEST_ERROR = "bad.payload";
     public static final String UNSUPPORTED_MEDIA_TYPE_ERROR = "media.type.unsupported";

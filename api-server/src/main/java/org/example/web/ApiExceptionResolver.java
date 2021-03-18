@@ -23,6 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -136,6 +137,22 @@ public class ApiExceptionResolver {
             final HttpMediaTypeNotAcceptableException ex) {
         return handleAllExceptions(
             request, response, HttpStatus.NOT_ACCEPTABLE, Messages.UNSUPPORTED_ACCEPT_HEADER_ERROR, ex);
+    }
+
+    /**
+     * Handles authentication exception represented by {@link AuthenticationException}.
+     *
+     * @param request An instance of {@link HttpServletRequest}.
+     * @param response An instance of {@link HttpServletResponse}.
+     * @param ex Auth exception type.
+     * @return An instance of {@link ResponseEntity}.
+     */
+    @ExceptionHandler(value = AuthenticationException.class)
+    public ResponseEntity<String> handleAuthenticationException(
+            final HttpServletRequest request,
+            final HttpServletResponse response,
+            final Exception ex) {
+        return handleAllExceptions(request, response, HttpStatus.UNAUTHORIZED, Messages.SERVER_ERROR_KEY, ex);
     }
 
     /**
