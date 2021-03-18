@@ -1,5 +1,7 @@
 package org.example.services;
 
+import java.util.List;
+
 import org.example.domain.teams.TeamDetails;
 
 /**
@@ -21,6 +23,13 @@ public interface TeamService {
      * @return An instance of {@link TeamDetails}.
      */
     TeamDetails getTeamInfo(String teamId);
+
+    /**
+     * Returns the team info as {@link TeamDetails}.
+     *
+     * @return An instance of collection of {@link TeamDetails}.
+     */
+    List<TeamDetails> getTeams();
 
     /**
      * Deletes the team.

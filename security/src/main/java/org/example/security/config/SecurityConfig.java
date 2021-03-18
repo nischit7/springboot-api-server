@@ -51,6 +51,8 @@ public class SecurityConfig {
                     this.jwtEntryPoint);
 
             http
+                .cors()
+                .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .antMatcher("/services/api/setup/**")
@@ -61,7 +63,7 @@ public class SecurityConfig {
                 .exceptionHandling()
                     .authenticationEntryPoint(this.jwtEntryPoint)
                 .and()
-                .csrf(csrf -> csrf.disable());
+                    .csrf(csrf -> csrf.disable());
         }
 
         @Override
@@ -70,6 +72,9 @@ public class SecurityConfig {
         }
     }
 
+    /**
+     * This is not used right now.
+     */
     public static class NoSecurityConfig extends WebSecurityConfigurerAdapter {
 
         public NoSecurityConfig() {

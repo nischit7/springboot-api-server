@@ -1,5 +1,6 @@
 package org.example.services.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.example.domain.teams.TeamDetails;
@@ -28,12 +29,17 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public TeamDetails getTeamInfo(final String teamId) {
-        final Optional<TeamDetails> teamDetails = persistenceEngine.getTeamInfo(teamId);
+        final Optional<TeamDetails> teamDetails = this.persistenceEngine.getTeamInfo(teamId);
         return teamDetails.map(teamDet -> teamDet).orElseThrow(() -> new TeamNotFoundException(teamId));
     }
 
     @Override
+    public List<TeamDetails> getTeams() {
+        return this.persistenceEngine.getTeams();
+    }
+
+    @Override
     public void deleteTeam(final String teamId) {
-        persistenceEngine.deleteTeam(teamId);
+        this.persistenceEngine.deleteTeam(teamId);
     }
 }

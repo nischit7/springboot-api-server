@@ -1,5 +1,7 @@
 package org.example.persistence.sql;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.example.domain.teams.TeamDetails;
@@ -42,6 +44,19 @@ public class SqlPersistenceEngine implements PersistenceEngine {
                     .teamDesc(teamDetailsEntity.getTeamDesc())
                     .build()))
                 .orElse(Optional.empty());
+    }
+
+    @Override
+    public List<TeamDetails> getTeams() {
+        final List<TeamDetails> teamDetails = new ArrayList<>();
+        this.teamDetailsRepository.findAll().forEach(teamDetailsEntity -> {
+            teamDetails.add(TeamDetails.builder()
+                    .teamId(teamDetailsEntity.getTeamId())
+                    .teamName(teamDetailsEntity.getTeamName())
+                    .teamDesc(teamDetailsEntity.getTeamDesc())
+                    .build());
+        });
+        return teamDetails;
     }
 
     @Override

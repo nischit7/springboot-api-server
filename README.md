@@ -10,6 +10,7 @@ It extends parent https://github.com/nischit7/java-web-base to derive the follow
 1. A single place to manage dependencies
 2. A single place with all plugins configured
 3. A single place with all code linting tools enabled.
+4. Ability to integrate with Spring Security (eg: JWT based authentication)
 
 # Objectives that were thought through while building this sample service
 

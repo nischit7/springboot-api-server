@@ -1,5 +1,6 @@
 package org.example.persistence;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.example.domain.teams.TeamDetails;
@@ -24,6 +25,13 @@ public interface PersistenceEngine {
      * @return An {@link Optional} holding {@link TeamDetails}.
      */
     Optional<TeamDetails> getTeamInfo(String teamId);
+
+    /**
+     * Returns all the teams info.
+     *
+     * @return An {@link List} holding {@link TeamDetails}.
+     */
+    List<TeamDetails> getTeams();
 
     /**
      * Deletes the team.
