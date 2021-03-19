@@ -1,27 +1,26 @@
 package org.example.persistence.sql;
 
+import java.util.Optional;
+
 import org.example.domain.teams.TeamDetails;
-import org.example.persistence.sql.entity.TeamDetailsEntity;
-import org.example.persistence.sql.repository.TeamDetailsRepository;
+import org.example.persistence.sql.config.SqlDBConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.*;
 
-@ExtendWith(MockitoExtension.class)
+@EnableAutoConfiguration
+@TestPropertySource("classpath:myservice-api-db-test.properties")
+@SpringBootTest(classes = SqlDBConfig.class)
 public class SqlPersistenceEngineTest {
 
-    @Mock
-    private TeamDetailsRepository mockTeamDetailsRepository;
-
-    @InjectMocks
+    @Autowired
     private SqlPersistenceEngine sqlPersistenceEngine;
 
     @BeforeEach
@@ -36,9 +35,9 @@ public class SqlPersistenceEngineTest {
                 .teamId("US123")
                 .teamName("Phenoix")
                 .build();
-        final ArgumentCaptor<TeamDetailsEntity> teamDetailsArgumentCaptor = ArgumentCaptor.forClass(TeamDetailsEntity.class);
-        sqlPersistenceEngine.createTeam(teamDetails);
-        verify(mockTeamDetailsRepository).save(teamDetailsArgumentCaptor.capture());
-        assertEquals(teamDetails.getTeamId(), teamDetailsArgumentCaptor.getValue().getTeamId());
+        this.sqlPersistenceEngine.createTeam(teamDetails);
+        final Optional<TeamDetails> savedTeamDetails = this.sqlPersistenceEngine.getTeamInfo(teamDetails.getTeamId());
+
+        assertThat(teamDetails.getTeamId(), equalTo(savedTeamDetails.get().getTeamId()));
     }
 }
