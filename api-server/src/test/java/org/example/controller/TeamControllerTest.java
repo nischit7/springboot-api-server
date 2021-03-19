@@ -1,5 +1,8 @@
 package org.example.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.example.domain.teams.TeamDetails;
 import org.example.services.TeamService;
 import org.example.services.impl.TeamNotFoundException;
@@ -70,5 +73,24 @@ public class TeamControllerTest {
     public void teamIsNotFound() {
         when(this.mockTeamService.getTeamInfo(eq("US123"))).thenThrow(new TeamNotFoundException());
         Assertions.assertThrows(TeamNotFoundException.class, () -> this.teamController.getTeamInfo("US123"));
+    }
+
+    @Test
+    @DisplayName("When team is not found")
+    public void whenGetAllTeamSucceeds() {
+        final TeamDetails teamDetails1 = TeamDetails.builder()
+                .teamId("1")
+                .teamName("11")
+                .teamDesc("11")
+                .build();
+        final TeamDetails teamDetails2 = TeamDetails.builder()
+                .teamId("2")
+                .teamName("22")
+                .teamDesc("22")
+                .build();
+        final List<TeamDetails> teamDetails = new ArrayList<>();
+        when(this.mockTeamService.getTeams()).thenReturn(teamDetails);
+        final ResponseEntity<List<TeamDetails>> teamDetailsResponseEntity = this.teamController.getTeams();
+        assertThat(teamDetailsResponseEntity.getStatusCode(), equalTo(HttpStatus.OK));
     }
 }
